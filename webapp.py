@@ -36,7 +36,7 @@ RUNS = {}
 RUNS_LOCK = threading.Lock()
 
 TOOL_ICONS = {1: "\U0001f3b5", 2: "\U0001f5bc\ufe0f", 3: "\U0001f4ac",
-              4: "\U0001f4e6", 5: "\U0001f39a\ufe0f"}
+              4: "\U0001f4e6", 5: "\U0001f39a\ufe0f", 6: "\U0001f3a8"}
 
 
 def _load_runs():
@@ -174,6 +174,37 @@ TOOL_SPECS = {
              "--boost-db", v.get("boost-db") or "5"]
             + (["--convert-ext", v.get("convert-ext") or "mp3"]
                if (v.get("mode") or "noise") == "convert" else [])
+            + (["--output", v["output"]] if v.get("output") else [])
+        ),
+    },
+    6: {
+        "name": "AI Thumbnail Generator",
+        "module": "tool6_ai_thumbnail.py",
+        "desc": "Free AI-generated art (no API key) plus your Telugu title overlay.",
+        "fields": [
+            ("prompt", "Describe the image", "text", True, "", None,
+             "English works best, e.g. worship guitar golden sunset cinematic"),
+            ("title", "Overlay title text", "text", False, "", None,
+             "e.g. \u0c2f\u0c47\u0c38\u0c41 \u0c28\u0c3e \u0c30\u0c3e\u0c1c\u0c3e \u2014 blank = no text"),
+            ("sub", "Small subtitle under title", "text", False, "", None,
+             "blank = none"),
+            ("logo", "Channel logo path", "text", False, "", None, "blank = none"),
+            ("size", "Image size WxH", "text", False, "1280x720", None, ""),
+            ("model", "AI model", "select", False, "flux",
+             ["flux", "turbo"], "flux = higher quality, turbo = fast"),
+            ("seed", "Random seed (optional)", "text", False, "", None,
+             "same seed + prompt = same image"),
+            ("output", "Output file name", "text", False, "", None, "blank = auto"),
+        ],
+        "build": lambda v: (
+            ["--prompt", v.get("prompt", "").strip(),
+             "--title", v.get("title", "").strip(),
+             "--sub", v.get("sub", "").strip(),
+             "--logo", v.get("logo", "").strip(),
+             "--size", v.get("size") or "1280x720",
+             "--model", v.get("model") or "flux"]
+            + (["--seed", v.get("seed", "").strip()]
+               if v.get("seed", "").strip() else [])
             + (["--output", v["output"]] if v.get("output") else [])
         ),
     },

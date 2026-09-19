@@ -1,8 +1,11 @@
 # AI YouTube Studio
 
 A small collection of Python tools for making YouTube videos in **Telugu/Kuvi**
-— lyric videos, thumbnails, subtitles, upload packages and audio cleanup.
-Works on Windows; no coding needed to use it.
+— lyric videos, thumbnails (including free AI-generated art), subtitles,
+upload packages and audio cleanup. Works on Windows; no coding needed to use it.
+
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/bunny123373/AI-Studio)
 
 ## First-time setup
 1. Install Python from <https://www.python.org/downloads/> and tick
@@ -66,7 +69,7 @@ Notes for servers:
 - Put a reverse proxy (nginx/Caddy) in front if you want HTTPS and a real
   domain; the app itself needs no database.
 
-## The 5 tools
+## The 6 tools
 | # | Tool | What it does |
 |---|------|--------------|
 | 1 | Auto Lyrics Video Maker | audio + lyrics (`.srt`/`.lrc`/`.txt`) → finished lyric video |
@@ -74,10 +77,12 @@ Notes for servers:
 | 3 | Auto Subtitle & Translation | speech → `.srt`, then translate it into Telugu/Hindi/etc. |
 | 4 | Upload Package Generator | song title → ready-to-paste title options, description, tags |
 | 5 | Audio Cleanup Assistant | denoise / loudness normalize / vocal removal / boost / convert |
+| 6 | AI Thumbnail Generator | free AI image from a text prompt (no API key) + Telugu title overlay |
 
 Notes:
-- Tool 3 needs an **internet connection** the first time (Whisper model
-  download) and for translation (Google); Tool 4 works offline.
+- Tools 3 and 6 need an **internet connection** — Tool 3 for the Whisper model
+  and Google translation, Tool 6 for the free Pollinations.ai image API
+  (falls back to an auto colour background when offline).
 - Tools 1 and 5 need `ffmpeg`, which `setup.bat` installs.
 
 ## Command-line use (optional)
@@ -89,6 +94,25 @@ python tools\tool2_thumbnail_studio.py --title "యేసు నా రాజా
 python tools\tool3_subtitle_translate.py --input song.mp3 --targets te en hi
 python tools\tool4_upload_package.py --title "యేసు నీ కార్యములు"
 python tools\tool5_audio_cleanup.py --input song.mp3 --mode noise
+python tools\tool6_ai_thumbnail.py --prompt "worship guitar, golden sunset" --title "యేసు నా రాజా"
 ```
 
 Run `python studio.py` for the same menu as `studio.bat`.
+
+## Project layout
+```
+AI_YouTube_Studio\
+├── studio.bat / studio.py     console menu (all 6 tools)
+├── webapp.bat / webapp.py     SaaS-style browser UI (localhost:8787)
+├── setup.bat                  one-time package installer
+├── render.yaml                Render Blueprint (one-click deploy)
+├── Dockerfile / docker-compose.yml
+├── deploy\ai-studio.service   systemd unit for a Linux VPS
+├── tools\                     the 6 tools + common / textdraw helpers
+├── samples\                   example song lyrics
+├── output\                    everything the tools produce (git-ignored)
+└── runs\                      run logs + run history (git-ignored)
+```
+
+## License
+MIT — see [LICENSE](LICENSE).

@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 """AI YouTube Studio - main launcher (run via studio.bat).
 
-Menu that starts any of the 5 tools:
+Menu that starts any of the 6 tools:
 
   1. Auto Lyrics Video Maker   audio + lyrics -> finished lyric video
   2. AI Thumbnail Studio       title -> YouTube thumbnail
   3. Auto Subtitle & Translation  speech -> .srt + translated subtitles
   4. Upload Package Generator  title -> YouTube title/description/tags
   5. Audio Cleanup Assistant   denoise / loudness / vocal-removal / convert
+  6. AI Thumbnail Generator    free AI-generated art + title overlay
 """
 import importlib
 import os
@@ -34,6 +35,8 @@ TOOLS = [
      "module": "tool4_upload_package", "needs_ffmpeg": False},
     {"num": 5, "name": "Audio Cleanup Assistant",
      "module": "tool5_audio_cleanup", "needs_ffmpeg": True},
+    {"num": 6, "name": "AI Thumbnail Generator (free AI art)",
+     "module": "tool6_ai_thumbnail", "needs_ffmpeg": False},
 ]
 
 
@@ -56,7 +59,7 @@ def main():
         print("  0  Exit")
         print("  ffmpeg :", "OK" if find_ffmpeg() else "NOT FOUND - run setup.bat")
 
-        choice = input("\nChoose a tool [1-5, 0] : ").strip()
+        choice = input("\nChoose a tool [1-6, 0] : ").strip()
         if choice == "0":
             print("Goodbye!")
             return 0
