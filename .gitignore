@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# App runtime data (recreated automatically)
+output/
+runs/
+*.log
+
+# Secrets / local tweaks
+.env

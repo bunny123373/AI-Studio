@@ -1,0 +1,12 @@
+# AI YouTube Studio - dependencies
+# Core tools (1, 2, 4, 5) need:
+pillow>=10.0
+numpy
+imageio-ffmpeg
+moviepy>=2.0
+deep-translator
+# Telugu letter shaping (conjuncts like క్రీస్తు) - used by Tools 1 and 2
+uharfbuzz
+freetype-py
+# Tool 3 (subtitles) also needs faster-whisper (installed separately in setup.bat
+# so a failure there does not stop everything else).

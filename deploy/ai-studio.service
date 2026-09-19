@@ -1,0 +1,24 @@
+# systemd unit for running the AI YouTube Studio web UI on a Linux VPS
+#   1. copy the project to /opt/ai-studio
+#   2. sudo cp deploy/ai-studio.service /etc/systemd/system/
+#   3. sudo systemctl daemon-reload
+#   4. sudo systemctl enable --now ai-studio
+# The site is then on http://<server-ip>:8787
+[Unit]
+Description=AI YouTube Studio Web UI
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/ai-studio
+Environment=HOST=0.0.0.0
+Environment=PORT=8787
+ExecStart=/usr/bin/python3 /opt/ai-studio/webapp.py
+Restart=always
+RestartSec=3
+# grows with concurrent tool runs; adjust to your RAM
+MemoryMax=4G
+
+[Install]
+WantedBy=multi-user.target
