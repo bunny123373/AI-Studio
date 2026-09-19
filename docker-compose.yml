@@ -1,0 +1,26 @@
+# AI YouTube Studio - one-command container run
+#   docker compose up -d      -> http://localhost:8787
+#   docker compose logs -f    -> follow logs
+#   docker compose down       -> stop
+# Outputs, run history and the Whisper model cache persist in named volumes.
+services:
+  ai-studio:
+    build: .
+    image: ai-studio:latest
+    container_name: ai-studio
+    ports:
+      - "8787:8787"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8787
+      - HF_HOME=/root/.cache/huggingface
+    volumes:
+      - studio-output:/app/output
+      - studio-runs:/app/runs
+      - studio-cache:/root/.cache/huggingface
+    restart: unless-stopped
+
+volumes:
+  studio-output:
+  studio-runs:
+  studio-cache:

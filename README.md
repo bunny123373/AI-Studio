@@ -35,13 +35,25 @@ python webapp.py --host 0.0.0.0 --port 8787
   persistent disk for outputs, run history and the Whisper model cache.
   Note: the free plan has ~512 MB RAM — use **Starter** or higher for
   Tool 3 (Whisper).
-- **Docker** — build the image and run it (output + run history persist in volumes):
+- **Docker (run it anywhere: VPS, own machine)** — build the image and run it.
+  Outputs, run history and the Whisper model cache persist in volumes:
   ```bash
   docker build -t ai-studio .
   docker run -d --name ai-studio -p 8787:8787 \
     -v ai-studio-output:/app/output -v ai-studio-runs:/app/runs \
+    -v ai-studio-cache:/root/.cache/huggingface \
     --restart unless-stopped ai-studio
   ```
+  Or with Compose (one command, same volumes, `HOST`/`PORT` already set):
+  ```bash
+  docker compose up -d     # -> http://localhost:8787
+  docker compose down      # stop
+  ```
+  **On Render via your own image:** build the image, push it to Docker Hub
+  (`docker push yourname/ai-studio`), then on Render **New + → Web Service →
+  "Deploy from Docker image"** → pick your image; add a disk mounted at
+  `/app/data` and env vars `HOST=0.0.0.0`, `AI_STUDIO_OUTPUT=/app/data/output`,
+  `AI_STUDIO_RUNS=/app/data/runs`.
 - **Linux VPS / systemd** — copy the project to `/opt/ai-studio`, then
   `sudo cp deploy/ai-studio.service /etc/systemd/system/` and
   `sudo systemctl enable --now ai-studio`. The site is on `http://<server-ip>:8787`.
